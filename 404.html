@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>길을 잃으셨나요? · Studio Nathan</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#15183a" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Gowun+Batang:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+    <link rel="stylesheet" href="/assets/site.css" />
+    <style>
+      .lost {
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        text-align: center;
+      }
+      .lost .wrap {
+        display: grid;
+        justify-items: center;
+        gap: 18px;
+        padding-block: 48px;
+      }
+      .lost img {
+        width: 120px;
+        height: 120px;
+      }
+      .lost h1 {
+        font-size: clamp(1.9rem, 1.4rem + 2vw, 2.6rem);
+      }
+      .lost p {
+        color: var(--on-night-2);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="hero lost">
+      <div class="sky" aria-hidden="true"></div>
+      <div class="wrap">
+        <img src="/favicon.svg" alt="" width="120" height="120" />
+        <p class="eyebrow eyebrow-night">404</p>
+        <h1>길을 잃으셨나요?</h1>
+        <p>찾으시는 페이지가 없어요. 등불을 따라 처음으로 돌아가 볼까요?</p>
+        <div class="actions">
+          <a class="btn btn-flame" href="/">Studio Nathan 처음으로</a>
+          <a class="btn btn-night" href="/starlight-tea/">별빛 찻집</a>
+          <a class="btn btn-night" href="/rumors-ad33/">루머스 AD 33</a>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,925 @@
+/* Studio Nathan — 종이(낮) 위의 등잔불, 밤하늘(표지·바닥글) */
+
+:root {
+  /* 종이와 먹 */
+  --paper: #f6efe3;
+  --paper-2: #efe4d1;
+  --card: #fcf8f1;
+  --ink: #2a2233;
+  --ink-2: #574b5c;
+  --ink-3: #85787f;
+  --line: rgba(42, 34, 51, 0.13);
+  /* 등잔불: 종이 위에서는 글자로 읽히도록 짙게 */
+  --accent: #9c5419;
+  --accent-soft: rgba(201, 130, 43, 0.13);
+  --live: #3f7a4a;
+  --dev: #a0611a;
+  /* 밤하늘 (표지와 바닥글은 늘 밤) */
+  --night: #15183a;
+  --night-2: #222659;
+  --on-night: #f3eadb;
+  --on-night-2: #bdb5d4;
+  --flame: #f4b942;
+  --star: #ffe6a6;
+  /* 단추 */
+  --btn-bg: #2a2233;
+  --btn-fg: #f6efe3;
+  --shadow: 0 30px 60px -34px rgba(52, 33, 18, 0.55);
+  --shadow-device: 0 26px 50px -22px rgba(20, 14, 30, 0.6);
+
+  --serif-ko: 'Gowun Batang', 'Noto Serif KR', 'Batang', serif;
+  --serif-en: 'Cormorant Garamond', 'Gowun Batang', Georgia, serif;
+  --sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+  --gutter: clamp(16px, 4.5vw, 40px);
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #10122a;
+    --paper-2: #14173a;
+    --card: #1a1d42;
+    --ink: #f1e9da;
+    --ink-2: #c6bdcd;
+    --ink-3: #9089a6;
+    --line: rgba(241, 233, 218, 0.12);
+    --accent: #f2b84b;
+    --accent-soft: rgba(242, 184, 75, 0.12);
+    --live: #8fcf98;
+    --dev: #f2b84b;
+    --night: #0b0d22;
+    --night-2: #181b45;
+    --btn-bg: #f2b84b;
+    --btn-fg: #1b1426;
+    --shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+    --shadow-device: 0 26px 50px -20px rgba(0, 0, 0, 0.8);
+    color-scheme: dark;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 17px;
+  line-height: 1.75;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: var(--serif-ko);
+  font-weight: 700;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 2px solid var(--flame);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 10;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--flame);
+  color: #1b1426;
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip:focus {
+  top: 12px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.eyebrow {
+  font-family: var(--serif-en);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.eyebrow-night {
+  color: var(--flame);
+}
+
+/* ── 단추 ─────────────────────────────── */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn-flame {
+  background: var(--flame);
+  color: #1b1426;
+}
+.btn-flame:hover {
+  background: #ffcd66;
+}
+.btn-night {
+  border-color: rgba(243, 234, 219, 0.28);
+  color: var(--on-night);
+}
+.btn-night:hover {
+  border-color: rgba(243, 234, 219, 0.6);
+}
+.btn-ink {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+}
+.btn-line {
+  border-color: var(--line);
+  color: var(--ink);
+}
+.btn-line:hover {
+  border-color: var(--ink-3);
+}
+.gh {
+  width: 18px;
+  height: 18px;
+}
+
+/* ── 표지 (밤하늘) ─────────────────────────────── */
+.hero {
+  position: relative;
+  overflow: hidden;
+  color: var(--on-night);
+  background:
+    radial-gradient(60% 70% at 78% 62%, rgba(244, 185, 66, 0.16), transparent 70%),
+    linear-gradient(180deg, var(--night) 0%, var(--night-2) 100%);
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* 별: 작은 점 두 겹 (천천히 반짝) */
+.sky,
+.sky::before,
+.sky::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.sky::before,
+.sky::after {
+  content: '';
+  background-repeat: repeat;
+}
+.sky::before {
+  background-image:
+    radial-gradient(1.4px 1.4px at 7% 18%, #fff 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 23% 42%, #fff 50%, transparent 52%),
+    radial-gradient(1.6px 1.6px at 38% 12%, var(--star) 50%, transparent 52%),
+    radial-gradient(1.1px 1.1px at 52% 30%, #fff 50%, transparent 52%),
+    radial-gradient(1.5px 1.5px at 66% 9%, #fff 50%, transparent 52%),
+    radial-gradient(1.2px 1.2px at 88% 22%, var(--star) 50%, transparent 52%),
+    radial-gradient(1.3px 1.3px at 95% 48%, #fff 50%, transparent 52%),
+    radial-gradient(1.1px 1.1px at 14% 72%, #fff 50%, transparent 52%),
+    radial-gradient(1.4px 1.4px at 46% 84%, var(--star) 50%, transparent 52%),
+    radial-gradient(1.1px 1.1px at 74% 90%, #fff 50%, transparent 52%);
+  background-size: 640px 420px;
+  opacity: 0.75;
+  animation: twinkle 7s ease-in-out infinite alternate;
+}
+.sky::after {
+  background-image:
+    radial-gradient(1px 1px at 12% 33%, #fff 50%, transparent 52%),
+    radial-gradient(1px 1px at 31% 64%, #fff 50%, transparent 52%),
+    radial-gradient(1px 1px at 57% 52%, #fff 50%, transparent 52%),
+    radial-gradient(1px 1px at 79% 37%, #fff 50%, transparent 52%),
+    radial-gradient(1px 1px at 91% 76%, #fff 50%, transparent 52%),
+    radial-gradient(1px 1px at 4% 92%, #fff 50%, transparent 52%);
+  background-size: 410px 300px;
+  opacity: 0.45;
+  animation: twinkle 5s 1.5s ease-in-out infinite alternate-reverse;
+}
+@keyframes twinkle {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 0.8;
+  }
+}
+
+.topbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 18px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  text-decoration: none;
+}
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  flex: none;
+}
+.brand-name {
+  font-family: var(--serif-en);
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.nav {
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  color: var(--on-night-2);
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.nav a:hover {
+  color: var(--on-night);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.hero-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: 40px;
+  padding-block: clamp(40px, 7vw, 88px) clamp(64px, 9vw, 120px);
+}
+
+.hero-copy {
+  display: grid;
+  gap: 22px;
+  min-width: 0;
+}
+.hero h1 {
+  font-size: clamp(2.35rem, 1.5rem + 3.4vw, 4.2rem);
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+}
+.lead {
+  max-width: 34em;
+  color: var(--on-night-2);
+  font-size: 1.08rem;
+}
+.hero-note {
+  color: rgba(189, 181, 212, 0.75);
+  font-size: 0.875rem;
+}
+
+.hero-lamp {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  margin: 0;
+}
+.lamp-art {
+  position: relative;
+  width: min(100%, 340px);
+  aspect-ratio: 1;
+}
+.lamp-art svg {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.45));
+}
+/* 불꽃(등잔 그림의 56, 28 자리 = 87.5%, 43.75%)을 가운데 두고 번지는 빛 */
+.halo {
+  position: absolute;
+  left: 87.5%;
+  top: 43.75%;
+  width: 110%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: radial-gradient(circle, rgba(255, 210, 120, 0.42) 0%, rgba(244, 185, 66, 0.12) 34%, transparent 64%);
+  animation: glow 3.2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+  from {
+    opacity: 0.75;
+    scale: 0.96;
+  }
+  to {
+    opacity: 1;
+    scale: 1.04;
+  }
+}
+.hero-lamp figcaption {
+  font-family: var(--serif-ko);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  text-align: center;
+  color: var(--on-night-2);
+}
+.hero-lamp cite,
+.footer-verse cite {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--serif-en);
+  font-size: 0.85rem;
+  font-style: italic;
+  letter-spacing: 0.06em;
+  color: rgba(244, 185, 66, 0.85);
+}
+
+/* 등잔 불꽃이 살짝 일렁인다 */
+.lamp-flame {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: flicker 2.6s ease-in-out infinite;
+}
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scale(1, 1) skewX(0deg);
+  }
+  30% {
+    transform: scale(0.96, 1.05) skewX(-2deg);
+  }
+  60% {
+    transform: scale(1.03, 0.97) skewX(1.5deg);
+  }
+}
+
+/* ── 공통 구획 ─────────────────────────────── */
+.section {
+  padding-block: clamp(72px, 10vw, 128px);
+}
+
+.section-head {
+  display: grid;
+  gap: 12px;
+  max-width: 40em;
+  margin-bottom: clamp(48px, 7vw, 88px);
+}
+.section-head h2,
+.story-copy h2,
+.contact h2 {
+  font-size: clamp(1.8rem, 1.3rem + 1.9vw, 2.65rem);
+}
+.section-head > p:last-child {
+  color: var(--ink-2);
+}
+
+/* ── 게임 ─────────────────────────────── */
+.feature {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(36px, 6vw, 80px);
+}
+.feature + .feature {
+  margin-top: clamp(88px, 12vw, 152px);
+}
+.feature-reverse .media {
+  order: 2;
+}
+
+.media {
+  position: relative;
+  /* 기기 그림이 표지 아래로 내려앉을 자리 */
+  padding-bottom: 12%;
+  min-width: 0;
+}
+.cover {
+  display: block;
+  overflow: hidden;
+  border-radius: 20px;
+  /* 밤 그림이 어두운 바탕에 묻히지 않게 가는 테두리 */
+  box-shadow: 0 0 0 1px var(--line), var(--shadow);
+}
+.cover img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 630;
+  object-fit: cover;
+  transition: scale 0.6s ease;
+}
+.cover:hover img {
+  scale: 1.03;
+}
+
+.device {
+  position: absolute;
+  bottom: 0;
+  background: #0d0f24;
+  box-shadow: var(--shadow-device);
+}
+.device img {
+  width: 100%;
+  height: auto;
+}
+/* 세로 휴대폰 (별빛 찻집) — 표지 오른쪽의 제목을 가리지 않게 표지를 조금 줄이고 휴대폰은 바깥쪽에 */
+.media-phone {
+  padding-bottom: 24%;
+}
+.media-phone .cover {
+  width: 82%;
+}
+.phone {
+  right: 0;
+  width: 26%;
+  padding: 2.2%;
+  border-radius: 13% / 6%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.phone img {
+  aspect-ratio: 390 / 844;
+  border-radius: 10% / 4.6%;
+}
+/* 가로 화면 (루머스 AD 33) */
+.screen {
+  left: 5%;
+  width: 48%;
+  padding: 1.6%;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.screen img {
+  aspect-ratio: 16 / 10;
+  border-radius: 6px;
+}
+
+.feature-copy {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+.feature-copy > p:not([class]) {
+  color: var(--ink-2);
+}
+.kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  color: var(--ink-3);
+  font-size: 0.9rem;
+}
+.kicker .no {
+  font-family: var(--serif-en);
+  font-size: 1rem;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--accent);
+}
+.feature h3 {
+  display: grid;
+  gap: 2px;
+  font-size: clamp(1.9rem, 1.4rem + 1.5vw, 2.5rem);
+}
+.feature h3 .en {
+  font-family: var(--serif-en);
+  font-size: 0.55em;
+  font-style: italic;
+  font-weight: 500;
+  color: var(--ink-3);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: start;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.status .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status-live {
+  color: var(--live);
+}
+.status-live .dot {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--live) 18%, transparent);
+}
+.status-dev {
+  color: var(--dev);
+}
+.status-dev .dot {
+  background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  border: 1.5px solid currentColor;
+}
+
+.verse {
+  margin: 4px 0 0;
+  padding: 2px 0 2px 18px;
+  border-left: 2px solid var(--accent);
+  font-family: var(--serif-ko);
+  color: var(--ink);
+  line-height: 1.8;
+}
+.verse cite {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--serif-en);
+  font-style: italic;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+}
+.note {
+  color: var(--ink-3);
+  font-size: 0.95rem;
+}
+
+.cast {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-2);
+  font-size: 0.97rem;
+}
+.cast li {
+  position: relative;
+  padding-left: 20px;
+}
+.cast li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 0.72em;
+  width: 7px;
+  height: 7px;
+  rotate: 45deg;
+  background: var(--accent);
+}
+.cast b {
+  margin-right: 6px;
+  font-family: var(--serif-ko);
+  color: var(--ink);
+}
+.cast .more {
+  color: var(--ink-3);
+}
+.cast .more::before {
+  background: transparent;
+  border: 1.5px solid var(--ink-3);
+}
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 24px;
+  margin: 6px 0 4px;
+  padding-block: 18px;
+  border-block: 1px solid var(--line);
+}
+.facts div {
+  min-width: 0;
+}
+.facts dt {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ink-3);
+}
+.facts dd {
+  margin: 2px 0 0;
+  color: var(--ink);
+  font-size: 0.97rem;
+  line-height: 1.55;
+}
+
+/* ── 스튜디오 ─────────────────────────────── */
+.studio {
+  background: var(--paper-2);
+}
+.story {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(40px, 7vw, 96px);
+}
+.seal {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  width: clamp(220px, 26vw, 300px);
+  aspect-ratio: 1;
+  margin: 0;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow:
+    0 0 0 1px var(--line),
+    0 0 0 10px var(--paper-2),
+    0 0 0 11px color-mix(in srgb, var(--accent) 45%, transparent),
+    var(--shadow);
+  text-align: center;
+}
+.hebrew {
+  font-family: 'Noto Serif Hebrew', 'Times New Roman', serif;
+  font-size: clamp(3.4rem, 2.6rem + 2.4vw, 4.6rem);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--accent);
+}
+.seal figcaption {
+  display: grid;
+  gap: 2px;
+}
+.seal-name {
+  font-family: var(--serif-en);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.seal-mean {
+  font-family: var(--serif-ko);
+  font-size: 0.95rem;
+  color: var(--ink-2);
+}
+.story-copy {
+  display: grid;
+  gap: 16px;
+  max-width: 36em;
+}
+.story-copy p:not(.eyebrow) {
+  color: var(--ink-2);
+}
+
+.principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin: clamp(56px, 8vw, 96px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.principles li {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: 28px 26px 30px;
+  border-radius: 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+.principles .num {
+  font-family: var(--serif-en);
+  font-size: 1.6rem;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--accent);
+}
+.principles h3 {
+  font-size: 1.25rem;
+}
+.principles p {
+  color: var(--ink-2);
+  font-size: 0.97rem;
+}
+
+/* ── 연락 ─────────────────────────────── */
+.contact-inner {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  text-align: center;
+}
+.contact-inner > p:not(.eyebrow) {
+  color: var(--ink-2);
+}
+.contact .btn {
+  margin-top: 10px;
+}
+
+/* ── 바닥글 (밤) ─────────────────────────────── */
+.footer {
+  background: var(--night);
+  color: var(--on-night);
+  padding-block: 48px calc(40px + env(safe-area-inset-bottom, 0px));
+}
+.footer-inner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 20px 40px;
+}
+.footer-verse {
+  justify-self: end;
+  text-align: right;
+  font-family: var(--serif-ko);
+  font-size: 0.95rem;
+  color: var(--on-night-2);
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+.footer-links a {
+  display: inline-block;
+  padding-block: 8px;
+  color: var(--on-night-2);
+  text-decoration: none;
+}
+.footer-links a:hover {
+  color: var(--on-night);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.copy {
+  justify-self: end;
+  font-size: 0.85rem;
+  color: rgba(189, 181, 212, 0.7);
+}
+
+/* ── 좁은 화면 ─────────────────────────────── */
+@media (max-width: 900px) {
+  .hero-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .hero-lamp {
+    order: -1;
+  }
+  .lamp-art {
+    width: min(56vw, 230px);
+  }
+  .hero-lamp figcaption {
+    display: none;
+  }
+  .feature {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .feature-reverse .media {
+    order: 0;
+  }
+  .story {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+  .principles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .footer-inner {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .footer-verse,
+  .copy {
+    justify-self: start;
+    text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  body {
+    font-size: 16px;
+  }
+  .brand-name {
+    font-size: 1.25rem;
+  }
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+  .nav a {
+    padding: 0 9px;
+    font-size: 0.9rem;
+  }
+  .phone {
+    width: 24%;
+  }
+  .media-phone {
+    padding-bottom: 20%;
+  }
+  .media-phone .cover {
+    width: 80%;
+  }
+  .screen {
+    width: 60%;
+    left: 4%;
+  }
+  .media {
+    padding-bottom: 16%;
+  }
+  .facts {
+    gap: 12px 16px;
+  }
+  .actions .btn {
+    flex: 1 1 auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand-name {
+    font-size: 1.1rem;
+  }
+  .nav a {
+    padding: 0 7px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .sky::before,
+  .sky::after,
+  .halo,
+  .lamp-flame {
+    animation: none;
+  }
+  .btn,
+  .cover img {
+    transition: none;
+  }
+}
